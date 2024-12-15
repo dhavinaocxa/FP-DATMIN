@@ -56,12 +56,20 @@ def main():
 
                     # Visualisasi distribusi sentimen
                     sentiment_counts = data['Predicted Sentiment'].value_counts()
+                    
+                    # Membuat diagram batang
                     fig, ax = plt.subplots()
                     sentiment_counts.plot(kind='bar', ax=ax, color=['#66b3ff', '#99ff99', '#ff6666'])
+                    
+                    # Set judul dan label
                     ax.set_title('Distribusi Prediksi Sentimen')
                     ax.set_xlabel('Sentimen')
                     ax.set_ylabel('Jumlah')
-                    ax.set_xticklabels(['Positif', 'Negatif', 'Netral'], rotation=0)
+                    
+                    # Menyesuaikan label sumbu x dengan kategori yang ada
+                    ax.set_xticklabels(sentiment_counts.index, rotation=0)
+                    
+                    # Menampilkan plot
                     st.pyplot(fig)
 
                     # Tombol untuk mengunduh hasil
