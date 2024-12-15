@@ -3,6 +3,7 @@ import pandas as pd
 import pickle
 import requests
 from io import BytesIO
+import matplotlib.pyplot as plt
 
 # Fungsi untuk mengunduh file dan memuat dengan pickle
 def load_model_from_url(url):
@@ -52,6 +53,16 @@ def main():
                     data['Predicted Sentiment'] = predictions
                     st.write("Hasil Prediksi:")
                     st.write(data[['stemming_data', 'Predicted Sentiment']].head())
+
+                    # Visualisasi distribusi sentimen
+                    sentiment_counts = data['Predicted Sentiment'].value_counts()
+                    fig, ax = plt.subplots()
+                    sentiment_counts.plot(kind='bar', ax=ax, color=['#66b3ff', '#99ff99', '#ff6666'])
+                    ax.set_title('Distribusi Prediksi Sentimen')
+                    ax.set_xlabel('Sentimen')
+                    ax.set_ylabel('Jumlah')
+                    ax.set_xticklabels(['Positif', 'Negatif', 'Netral'], rotation=0)
+                    st.pyplot(fig)
 
                     # Tombol untuk mengunduh hasil
                     st.download_button(
