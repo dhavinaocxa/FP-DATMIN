@@ -34,8 +34,8 @@ def main():
         st.write(data.head())
 
         # Load model dan vectorizer dari URL
-        model_url = "https://raw.githubusercontent.com/dhavinaocxa/latihan-datmin/main/rf_model.pkl"
-        vectorizer_url = "https://raw.githubusercontent.com/dhavinaocxa/latihan-datmin/main/vectorizer.pkl"
+        model_url = "https://raw.githubusercontent.com/dhavinaocxa/fp-datmin/main/rf_model.pkl"
+        vectorizer_url = "https://raw.githubusercontent.com/dhavinaocxa/fp-datmin/main/vectorizer.pkl"
 
         model = load_model_from_url(model_url)
         vectorizer = load_model_from_url(vectorizer_url)
