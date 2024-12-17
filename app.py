@@ -28,7 +28,7 @@ def main():
         st.write(data)
 
         # Load model dan vectorizer dari URL
-        model_url = "https://raw.githubusercontent.com/dhavinaocxa/fp-datmin/main/rf_model.pkl"
+        model_url = "https://raw.githubusercontent.com/dhavinaocxa/fp-datmin/main/rf_model_smote.pkl"
         vectorizer_url = "https://raw.githubusercontent.com/dhavinaocxa/fp-datmin/main/vectorizer.pkl"
 
         model = load_model_from_url(model_url)
