@@ -35,8 +35,8 @@ def main():
         vectorizer = load_model_from_url(vectorizer_url)
 
         if model and vectorizer:
-            # Pastikan kolom 'stemming_data' dan 'label' ada dalam file
-            if 'stemming_data' in data.columns and 'label' in data.columns:
+            # Pastikan kolom 'stemming_data' dan 'sentiment' ada dalam file
+            if 'stemming_data' in data.columns and 'sentiment' in data.columns:
                 # Prediksi sentimen
                 if st.button("Prediksi Sentimen"):
                     X = vectorizer.transform(data['stemming_data'])
@@ -47,8 +47,8 @@ def main():
                     st.write("Hasil Prediksi:")
                     st.write(data[['stemming_data', 'Predicted Sentiment']])
 
-                    # Menghitung akurasi jika ada label
-                    accuracy = accuracy_score(data['label'], predictions)
+                    # Menghitung akurasi jika ada sentiment
+                    accuracy = accuracy_score(data['sentiment'], predictions)
                     st.success(f"Akurasi Model: {accuracy:.2%}")
 
                     # Visualisasi distribusi hasil sentimen
@@ -73,7 +73,7 @@ def main():
                         mime="text/csv"
                     )
             else:
-                st.error("Kolom 'stemming_data' atau 'label' tidak ditemukan dalam file yang diunggah.")
+                st.error("Kolom 'stemming_data' atau 'sentiment' tidak ditemukan dalam file yang diunggah.")
 
 if __name__ == '__main__':
     main()
