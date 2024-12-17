@@ -47,10 +47,32 @@ def main():
                     # Prediksi dengan model yang sudah dilatih
                     predictions = model.predict(X_test)
 
+                    # Simpan hasil prediksi di session_state
+                    st.session_state['predictions'] = predictions
+                    st.session_state['data'] = data
+                    st.session_state['X_test'] = X_test
+
                     # Tambahkan hasil prediksi ke data
                     data['Predicted Sentiment'] = predictions
 
-                    # Tampilkan hasil prediksi
+                    # Simpan hasil prediksi di session_state
+                    st.session_state['results'] = data
+
+                    # Evaluasi Akurasi jika ada label 'sentiment'
+                    if 'sentiment' in data.columns:
+                        accuracy = accuracy_score(data['sentiment'], predictions)
+                        st.session_state['accuracy'] = accuracy
+                        st.session_state['report'] = classification_report(data['sentiment'], predictions)
+                    else:
+                        st.session_state['accuracy'] = None
+                        st.session_state['report'] = None
+
+                # Tampilkan hasil prediksi dan evaluasi jika tersedia di session_state
+                if 'predictions' in st.session_state:
+                    data = st.session_state['data']
+                    predictions = st.session_state['predictions']
+                    data['Predicted Sentiment'] = predictions
+
                     st.write("Hasil Prediksi Sentimen:")
                     st.write(data[['stemming_data', 'Predicted Sentiment']])
 
@@ -65,24 +87,22 @@ def main():
                     )
                     st.plotly_chart(fig_bar)
 
-                    # Evaluasi Akurasi jika ada label 'sentiment'
-                    if 'sentiment' in data.columns:
-                        # Menghitung akurasi
-                        accuracy = accuracy_score(data['sentiment'], predictions)
-                        st.success(f"Akurasi Model: {accuracy:.2%}")
+                    # Evaluasi akurasi jika tersedia
+                    if st.session_state['accuracy'] is not None:
+                        st.success(f"Akurasi Model: {st.session_state['accuracy']:.2%}")
                         st.write("Laporan Klasifikasi:")
-                        st.text(classification_report(data['sentiment'], predictions))
+                        st.text(st.session_state['report'])
                     else:
                         st.warning("Kolom 'sentiment' tidak ditemukan. Tidak dapat menghitung akurasi.")
 
-                    # Tombol untuk mengunduh hasil
+                    # Tombol untuk mengunduh hasil prediksi
                     st.download_button(
                         label="Download Hasil Prediksi",
                         data=data.to_csv(index=False),
                         file_name="hasil_prediksi.csv",
                         mime="text/csv"
                     )
-                        
+
             else:
                 st.error("Kolom 'stemming_data' tidak ditemukan dalam file yang diunggah.")
 
