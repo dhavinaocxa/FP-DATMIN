@@ -61,11 +61,14 @@ def main():
                     # Evaluasi Akurasi jika ada label 'sentiment'
                     if 'sentiment' in data.columns:
                         accuracy = accuracy_score(data['sentiment'], predictions)
+                        report_dict = classification_report(data['sentiment'], predictions, output_dict=True)
+                        report_df = pd.DataFrame(report_dict).transpose()  # Konversi ke DataFrame
+
                         st.session_state['accuracy'] = accuracy
-                        st.session_state['report'] = classification_report(data['sentiment'], predictions)
+                        st.session_state['report_df'] = report_df
                     else:
                         st.session_state['accuracy'] = None
-                        st.session_state['report'] = None
+                        st.session_state['report_df'] = None
 
                 # Tampilkan hasil prediksi dan evaluasi jika tersedia di session_state
                 if 'predictions' in st.session_state:
@@ -91,7 +94,7 @@ def main():
                     if st.session_state['accuracy'] is not None:
                         st.success(f"Akurasi Model: {st.session_state['accuracy']:.2%}")
                         st.write("Laporan Klasifikasi:")
-                        st.text(st.session_state['report'])
+                        st.table(st.session_state['report_df'])  # Tampilkan laporan dalam bentuk tabel
                     else:
                         st.warning("Kolom 'sentiment' tidak ditemukan. Tidak dapat menghitung akurasi.")
 
