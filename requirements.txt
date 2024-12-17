@@ -1,6 +1,6 @@
 streamlit
-pandas==1.5.3
+pandas
 scikit-learn==1.5.2
-numpy==1.26.4
+numpy
 requests
 plotly
