@@ -17,22 +17,14 @@ def load_model_from_url(url):
 # Fungsi utama untuk aplikasi
 def main():
     # Title untuk aplikasi
-    st.title("Analisis Sentimen dengan Model ML")
-
-    # Gaya tambahan untuk aplikasi
-    html_temp = """
-    <div style="background-color:cyan;padding:10px">
-    <h1 style="color:black;text-align:center;">Streamlit Sentiment Analysis App</h1>
-    </div>
-    """
-    st.markdown(html_temp, unsafe_allow_html=True)
+    st.title("Analisis Sentimen SpotifyWrapped 2024")
 
     # Bagian untuk upload file
     uploaded_file = st.file_uploader("Upload file CSV Anda", type=["csv"])
     if uploaded_file is not None:
         data = pd.read_csv(uploaded_file)
         st.write("Data yang diunggah:")
-        st.write(data.head())
+        st.write(data)
 
         # Load model dan vectorizer dari URL
         model_url = "https://raw.githubusercontent.com/dhavinaocxa/fp-datmin/main/rf_model.pkl"
@@ -52,7 +44,7 @@ def main():
                     # Menambahkan hasil prediksi ke data
                     data['Predicted Sentiment'] = predictions
                     st.write("Hasil Prediksi:")
-                    st.write(data[['stemming_data', 'Predicted Sentiment']].head())
+                    st.write(data[['stemming_data', 'Predicted Sentiment']])
 
                     # Visualisasi distribusi hasil sentimen
                     sentiment_counts = data['Predicted Sentiment'].value_counts()
