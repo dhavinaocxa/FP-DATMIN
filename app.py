@@ -3,8 +3,8 @@ import pandas as pd
 import pickle
 import requests
 from io import BytesIO
+from sklearn.metrics import accuracy_score, classification_report
 import plotly.express as px
-from sklearn.metrics import accuracy_score  # Import metrics untuk menghitung akurasi
 
 # Fungsi untuk mengunduh file dan memuat dengan pickle
 def load_model_from_url(url):
@@ -23,6 +23,7 @@ def main():
     # Bagian untuk upload file
     uploaded_file = st.file_uploader("Upload file CSV Anda", type=["csv"])
     if uploaded_file is not None:
+        # Load data
         data = pd.read_csv(uploaded_file)
         st.write("Data yang diunggah:")
         st.write(data)
@@ -34,28 +35,27 @@ def main():
         model = load_model_from_url(model_url)
         vectorizer = load_model_from_url(vectorizer_url)
 
+        # Pastikan model dan vectorizer berhasil di-load
         if model and vectorizer:
-            # Pastikan kolom 'stemming_data' dan 'sentiment' ada dalam file
-            if 'stemming_data' in data.columns and 'sentiment' in data.columns:
-                # Prediksi sentimen
-                if st.button("Prediksi Sentimen"):
-                    X = vectorizer.transform(data['stemming_data'])
-                    predictions = model.predict(X)
+            # Validasi kolom 'stemming_data'
+            if 'stemming_data' in data.columns:
+                # Transformasi data menggunakan vectorizer
+                X_test = vectorizer.transform(data['stemming_data'])
 
-                    # Menambahkan hasil prediksi ke data
+                # Prediksi Sentimen
+                if st.button("Prediksi Sentimen"):
+                    # Prediksi dengan model yang sudah dilatih
+                    predictions = model.predict(X_test)
+
+                    # Tambahkan hasil prediksi ke data
                     data['Predicted Sentiment'] = predictions
-                    st.write("Hasil Prediksi:")
+
+                    # Tampilkan hasil prediksi
+                    st.write("Hasil Prediksi Sentimen:")
                     st.write(data[['stemming_data', 'Predicted Sentiment']])
 
-                    # Menghitung akurasi jika ada sentiment
-                    accuracy = accuracy_score(data['sentiment'], predictions)
-                    st.success(f"Akurasi Model: {accuracy:.2%}")
-
-                    # Visualisasi distribusi hasil sentimen
+                    # Visualisasi distribusi sentimen
                     sentiment_counts = data['Predicted Sentiment'].value_counts()
-                    st.write("Distribusi Hasil Sentimen:")
-
-                    # Membuat Bar Chart untuk distribusi sentimen
                     fig_bar = px.bar(
                         sentiment_counts,
                         x=sentiment_counts.index,
@@ -65,6 +65,16 @@ def main():
                     )
                     st.plotly_chart(fig_bar)
 
+                    # Evaluasi Akurasi jika ada label 'sentiment'
+                    if 'sentiment' in data.columns:
+                        # Menghitung akurasi
+                        accuracy = accuracy_score(data['sentiment'], predictions)
+                        st.success(f"Akurasi Model: {accuracy:.2%}")
+                        st.write("Laporan Klasifikasi:")
+                        st.text(classification_report(data['sentiment'], predictions))
+                    else:
+                        st.warning("Kolom 'sentiment' tidak ditemukan. Tidak dapat menghitung akurasi.")
+
                     # Tombol untuk mengunduh hasil
                     st.download_button(
                         label="Download Hasil Prediksi",
@@ -73,7 +83,7 @@ def main():
                         mime="text/csv"
                     )
             else:
-                st.error("Kolom 'stemming_data' atau 'sentiment' tidak ditemukan dalam file yang diunggah.")
+                st.error("Kolom 'stemming_data' tidak ditemukan dalam file yang diunggah.")
 
 if __name__ == '__main__':
     main()
