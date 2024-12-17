@@ -75,14 +75,14 @@ def main():
                     else:
                         st.warning("Kolom 'sentiment' tidak ditemukan. Tidak dapat menghitung akurasi.")
 
-                    
-                    )
                 # Tombol untuk mengunduh hasil
                 st.download_button(
                     label="Download Hasil Prediksi",
                     data=data.to_csv(index=False),
                     file_name="hasil_prediksi.csv",
                     mime="text/csv"
+                )
+                        
             else:
                 st.error("Kolom 'stemming_data' tidak ditemukan dalam file yang diunggah.")
 
