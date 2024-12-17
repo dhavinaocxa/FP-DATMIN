@@ -48,7 +48,6 @@ def main():
 
                     # Visualisasi distribusi hasil sentimen
                     sentiment_counts = data['Predicted Sentiment'].value_counts()
-                    st.write("Distribusi Hasil Sentimen:")
 
                     # Membuat Bar Chart untuk distribusi sentimen
                     fig_bar = px.bar(
@@ -56,7 +55,7 @@ def main():
                         x=sentiment_counts.index,
                         y=sentiment_counts.values,
                         labels={'x': 'Sentimen', 'y': 'Jumlah'},
-                        title="Distribusi Sentimen"
+                        title="Distribusi Hasil Sentimen"
                     )
                     st.plotly_chart(fig_bar)
 
