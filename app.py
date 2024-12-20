@@ -18,7 +18,7 @@ def load_model_from_url(url):
 # Fungsi utama untuk aplikasi
 def main():
     # Title untuk aplikasi
-    st.title("Analisis Sentimen/nSpotifyWrapped 2024")
+    st.title("Analisis Sentimen<br>SpotifyWrapped 2024", unsafe_allow_html=True)
 
     # Bagian untuk upload file
     uploaded_file = st.file_uploader("Upload file CSV Anda", type=["csv"])
